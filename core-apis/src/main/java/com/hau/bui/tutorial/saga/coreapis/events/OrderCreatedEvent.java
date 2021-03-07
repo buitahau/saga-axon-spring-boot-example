@@ -1,20 +1,18 @@
 package com.hau.bui.tutorial.saga.coreapis.events;
 
-import java.math.BigDecimal;
-
 public class OrderCreatedEvent {
 
     public final String orderId;
 
     public final String itemType;
 
-    public final BigDecimal price;
+    public final double price;
 
     public final String currency;
 
     public final String orderStatus;
 
-    public OrderCreatedEvent(String orderId, String itemType, BigDecimal price, String currency, String orderStatus) {
+    public OrderCreatedEvent(String orderId, String itemType, double price, String currency, String orderStatus) {
         this.orderId = orderId;
         this.itemType = itemType;
         this.price = price;

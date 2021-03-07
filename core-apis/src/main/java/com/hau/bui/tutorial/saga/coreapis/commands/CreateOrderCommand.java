@@ -2,8 +2,6 @@ package com.hau.bui.tutorial.saga.coreapis.commands;
 
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
-import java.math.BigDecimal;
-
 public class CreateOrderCommand {
 
     @TargetAggregateIdentifier
@@ -11,13 +9,13 @@ public class CreateOrderCommand {
 
     public final String itemType;
 
-    public final BigDecimal price;
+    public final double price;
 
     public final String currency;
 
     public final String orderStatus;
 
-    public CreateOrderCommand(String orderId, String itemType, BigDecimal price, String currency, String orderStatus) {
+    public CreateOrderCommand(String orderId, String itemType, double price, String currency, String orderStatus) {
         this.orderId = orderId;
         this.itemType = itemType;
         this.price = price;

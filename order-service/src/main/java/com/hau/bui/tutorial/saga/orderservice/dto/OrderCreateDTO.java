@@ -6,7 +6,7 @@ public class OrderCreateDTO {
 
     private String itemType;
 
-    private BigDecimal price;
+    private double price;
 
     private String currency;
 
@@ -18,11 +18,11 @@ public class OrderCreateDTO {
         this.itemType = itemType;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

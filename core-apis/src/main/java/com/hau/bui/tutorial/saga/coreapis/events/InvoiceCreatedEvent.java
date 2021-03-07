@@ -6,8 +6,12 @@ public class InvoiceCreatedEvent {
 
     public final String paymentId;
 
-    public InvoiceCreatedEvent(String paymentId, String orderId) {
+    public final double invoice;
+
+    public InvoiceCreatedEvent(String paymentId, String orderId, double
+                    invoice) {
         this.paymentId = paymentId;
         this.orderId = orderId;
+        this.invoice = invoice;
     }
 }

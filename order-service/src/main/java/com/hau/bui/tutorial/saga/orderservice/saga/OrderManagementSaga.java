@@ -2,11 +2,9 @@ package com.hau.bui.tutorial.saga.orderservice.saga;
 
 import com.hau.bui.tutorial.saga.coreapis.commands.CreateInvoiceCommand;
 import com.hau.bui.tutorial.saga.coreapis.commands.CreateShippingCommand;
+import com.hau.bui.tutorial.saga.coreapis.commands.RejectOrderCommand;
 import com.hau.bui.tutorial.saga.coreapis.commands.UpdateOrderStatusCommand;
-import com.hau.bui.tutorial.saga.coreapis.events.InvoiceCreatedEvent;
-import com.hau.bui.tutorial.saga.coreapis.events.OrderCreatedEvent;
-import com.hau.bui.tutorial.saga.coreapis.events.OrderShippedEvent;
-import com.hau.bui.tutorial.saga.coreapis.events.OrderUpdatedEvent;
+import com.hau.bui.tutorial.saga.coreapis.events.*;
 import com.hau.bui.tutorial.saga.orderservice.aggregate.OrderStatus;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.modelling.saga.SagaEventHandler;
@@ -33,7 +31,8 @@ public class OrderManagementSaga {
 
         System.out.println("order id " + orderCreatedEvent.orderId);
 
-        commandGateway.send(new CreateInvoiceCommand(paymentId, orderCreatedEvent.orderId));
+        commandGateway.send(new CreateInvoiceCommand(paymentId,
+                        orderCreatedEvent.orderId, orderCreatedEvent.price));
     }
 
     @SagaEventHandler(associationProperty = "paymentId")
@@ -47,6 +46,16 @@ public class OrderManagementSaga {
         commandGateway.send(new CreateShippingCommand(shippingId, invoiceCreatedEvent.orderId, invoiceCreatedEvent.paymentId));
     }
 
+    @SagaEventHandler(associationProperty = "paymentId")
+    public void handle(RejectInvoiceEvent rejectInvoiceEvent) {
+        String shippingId = UUID.randomUUID().toString();
+
+        System.out.println("Saga rejected in payment service");
+
+        commandGateway.send(new RejectOrderCommand(rejectInvoiceEvent
+                        .orderId, rejectInvoiceEvent.paymentId));
+    }
+
     @SagaEventHandler(associationProperty = "orderId")
     public void handle(OrderShippedEvent orderShippedEvent) {
         commandGateway.send(new UpdateOrderStatusCommand(orderShippedEvent.orderId, String.valueOf(OrderStatus.SHIPPED)));
@@ -54,6 +63,14 @@ public class OrderManagementSaga {
 
     @SagaEventHandler(associationProperty = "orderId")
     public void handle(OrderUpdatedEvent orderUpdatedEvent) {
+        SagaLifecycle.end();
+    }
+
+    @SagaEventHandler(associationProperty = "orderId")
+    public void handle(
+                    RejectOrderEvent rejectOrderEvent) {
+
+        System.out.println("End saga life cycle with reject order.");
         SagaLifecycle.end();
     }
 }
